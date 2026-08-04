@@ -12,6 +12,7 @@ So "items" tracks presence (new/removed listings), not quantity.
 """
 import html
 import json
+import os
 import re
 import subprocess
 import sys
@@ -22,7 +23,7 @@ from pathlib import Path
 sys.stdout.reconfigure(encoding="utf-8")
 
 COLLECTION_URL = "https://damascusgaming.myshopify.com/collections/mtg-singles-beta?sort_by=created-descending"
-DISCORD_WEBHOOK_URL = "https://discord.com/api/webhooks/1534220829896867932/Kje7xHqNk9FWWztIFIYlo-67Q2xgxY7sXJg9_UQ5PUEwzgdkGFySjF-PKpLl2aYV5OJF"
+DISCORD_WEBHOOK_URL = os.environ["DISCORD_WEBHOOK_URL"]
 STATE_FILE = Path(__file__).parent / "inventory_state.json"
 
 HEADING_RE = re.compile(
