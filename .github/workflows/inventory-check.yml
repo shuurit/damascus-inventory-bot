@@ -1,13 +1,9 @@
 name: Inventory Check
 
 on:
-  schedule:
-    # ~1:33 PM America/Denver (MDT, UTC-6) — offset from :30 to avoid top-of-half-hour queueing
-    - cron: "33 19 * * *"
-    # ~8:07 PM America/Denver (MDT, UTC-6) — offset from :00 to avoid top-of-hour queueing
-    - cron: "7 2 * * *"
-    # TEST: 10:15 PM MDT, 2026-08-04 — remove after confirming schedule fires
-    - cron: "15 4 * * *"
+  # Scheduling is handled externally via cron-job.org calling the
+  # workflow_dispatch API below — GitHub's own `schedule:` trigger was
+  # confirmed unreliable for this repo (never fired even once after 24h+).
   workflow_dispatch: {}
 
 permissions:
