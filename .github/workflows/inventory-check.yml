@@ -6,6 +6,8 @@ on:
     - cron: "33 19 * * *"
     # ~8:07 PM America/Denver (MDT, UTC-6) — offset from :00 to avoid top-of-hour queueing
     - cron: "7 2 * * *"
+    # TEST: 10:15 PM MDT, 2026-08-04 — remove after confirming schedule fires
+    - cron: "15 4 * * *"
   workflow_dispatch: {}
 
 permissions:
