@@ -2,10 +2,10 @@ name: Inventory Check
 
 on:
   schedule:
-    # 1:30 PM America/Denver (MDT, UTC-6)
-    - cron: "30 19 * * *"
-    # 8:00 PM America/Denver (MDT, UTC-6)
-    - cron: "0 2 * * *"
+    # ~1:33 PM America/Denver (MDT, UTC-6) — offset from :30 to avoid top-of-half-hour queueing
+    - cron: "33 19 * * *"
+    # ~8:07 PM America/Denver (MDT, UTC-6) — offset from :00 to avoid top-of-hour queueing
+    - cron: "7 2 * * *"
   workflow_dispatch: {}
 
 permissions:
