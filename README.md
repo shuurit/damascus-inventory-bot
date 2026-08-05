@@ -26,13 +26,14 @@ So instead of quantities, this tracks:
 On the very first run (no prior state), it just records the baseline without
 posting to Discord — there's nothing to compare against yet.
 
-Scheduling is handled by [`.github/workflows/inventory-check.yml`](.github/workflows/inventory-check.yml),
-which runs on GitHub Actions' own cron:
+Scheduling is handled **externally by [cron-job.org](https://cron-job.org)**,
+which calls the `workflow_dispatch` API on [`.github/workflows/inventory-check.yml`](.github/workflows/inventory-check.yml)
+at 1:33 PM and 8:07 PM America/Denver daily. It can also be triggered manually
+from the Actions tab.
 
-- `30 19 * * *` UTC — 1:30 PM MDT
-- `0 2 * * *` UTC — 8:00 PM MDT
-
-It can also be triggered manually from the Actions tab (`workflow_dispatch`).
+GitHub Actions' own native `schedule:` cron trigger was tried first but
+confirmed unreliable for this repo — it never fired once, even 24+ hours after
+being configured — so scheduling now lives outside GitHub entirely.
 
 ## Setup
 
