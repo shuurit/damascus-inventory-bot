@@ -8,7 +8,9 @@ and reports any changes to a Discord webhook.
 Note: this storefront does not expose exact stock quantities anywhere
 (collection page and product pages only show "Sold out" vs. in-stock,
 and the public products.json API only exposes an `available` boolean).
-So "items" tracks presence (new/removed listings), not quantity.
+So "items" tracks presence to detect new listings, not quantity. Removed
+listings are still recorded in state (so they don't reappear as "new" if
+re-listed later at the same title) but are not reported to Discord.
 """
 import html
 import json
@@ -89,7 +91,6 @@ def main():
     old_count = state.get("product_count")
 
     new_titles = sorted(set(items) - set(old_items))
-    removed_titles = sorted(set(old_items) - set(items))
     count_changed = (old_count is not None) and (old_count != product_count)
 
     lines = []
@@ -102,8 +103,6 @@ def main():
 
     for title in new_titles:
         lines.append(f"- {title}: NEW listing")
-    for title in removed_titles:
-        lines.append(f"- {title}: REMOVED")
 
     should_post = bool(lines) and not is_first_run
     # Always post the product count as a baseline confirmation, even on

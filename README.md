@@ -11,7 +11,9 @@ and the public `products.json` API only exposes an `available` boolean.
 So instead of quantities, this tracks:
 
 - **Total product count** on the collection (the "N products" figure shown on the page)
-- **New or removed listings** on page 1 of the collection (sorted newest-first)
+- **New listings** on page 1 of the collection (sorted newest-first) — removed
+  listings are tracked internally to avoid re-flagging re-listed items, but
+  aren't reported to Discord
 
 ## How it runs
 
