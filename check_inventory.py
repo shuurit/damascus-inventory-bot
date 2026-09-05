@@ -44,6 +44,8 @@ def fetch_html(url: str) -> str:
 def parse_page(page_html: str):
     count_match = COUNT_RE.search(page_html)
     if not count_match:
+        print(f"DEBUG: page length={len(page_html)}", file=sys.stderr)
+        print(f"DEBUG: first 1500 chars:\n{page_html[:1500]}", file=sys.stderr)
         raise RuntimeError("Could not find product count on page")
     product_count = int(count_match.group(1).replace(",", ""))
 
