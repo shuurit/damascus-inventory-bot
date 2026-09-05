@@ -18,6 +18,7 @@ import os
 import re
 import subprocess
 import sys
+import time
 import urllib.request
 from datetime import datetime, timezone
 from pathlib import Path
@@ -44,8 +45,6 @@ def fetch_html(url: str) -> str:
 def parse_page(page_html: str):
     count_match = COUNT_RE.search(page_html)
     if not count_match:
-        print(f"DEBUG: page length={len(page_html)}", file=sys.stderr)
-        print(f"DEBUG: first 1500 chars:\n{page_html[:1500]}", file=sys.stderr)
         raise RuntimeError("Could not find product count on page")
     product_count = int(count_match.group(1).replace(",", ""))
 
@@ -57,6 +56,22 @@ def parse_page(page_html: str):
         raise RuntimeError("Could not find any product listings on page")
 
     return product_count, items
+
+
+def fetch_and_parse(url: str, attempts: int = 4, delay_seconds: float = 15):
+    # Shopify/Cloudflare occasionally serves a bot-check or empty page to
+    # cloud-runner IPs; a short retry clears most of these transient blips.
+    last_error = None
+    for attempt in range(1, attempts + 1):
+        try:
+            page_html = fetch_html(url)
+            return parse_page(page_html)
+        except Exception as e:
+            last_error = e
+            print(f"Attempt {attempt}/{attempts} failed: {e}", file=sys.stderr)
+            if attempt < attempts:
+                time.sleep(delay_seconds)
+    raise last_error
 
 
 def load_state():
@@ -83,8 +98,7 @@ def git(*args):
 
 
 def main():
-    html = fetch_html(COLLECTION_URL)
-    product_count, items = parse_page(html)
+    product_count, items = fetch_and_parse(COLLECTION_URL)
 
     state = load_state()
     is_first_run = not state.get("items") and state.get("product_count") is None
