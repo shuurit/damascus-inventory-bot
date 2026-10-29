@@ -15,6 +15,12 @@ So instead of quantities, this tracks:
   listings are tracked internally to avoid re-flagging re-listed items, but
   aren't reported to Discord
 
+Each new listing is posted to Discord as an embed with a link to the product
+on the site, a [Scryfall](https://scryfall.com) search link for the card, and
+the card image (looked up via the Scryfall API from the card name and set code
+in the listing title). If the Scryfall lookup fails, the embed is still posted
+without an image.
+
 ## How it runs
 
 [`check_inventory.py`](check_inventory.py) does the whole cycle in one pass:
